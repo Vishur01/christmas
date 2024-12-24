@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good Morning Puchku ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;600&display=swap');
+        
+        body {
+            margin: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: #ffe6ea;
+            color: #ff4d6d;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            max-width: 800px;
+            margin: 20px;
+            box-shadow: 0 0 20px rgba(255, 77, 109, 0.2);
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            margin: 0;
+            color: #ff4d6d;
+            text-shadow: 1px 1px 2px rgba(255, 77, 109, 0.3);
+        }
+
+        .greeting {
+            font-size: 2rem;
+            margin: 1.5rem 0;
+            color: #ff758f;
+            font-weight: 600;
+        }
+
+        .message {
+            font-size: 1.5rem;
+            margin: 2rem 0;
+            line-height: 1.5;
+            color: #ff758f;
+            padding: 1rem;
+            border-top: 2px solid #ffe6ea;
+            border-bottom: 2px solid #ffe6ea;
+        }
+
+        button {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 1rem;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        button:hover {
+            background: #ff758f;
+            transform: scale(1.05);
+        }
+
+        .game-container {
+            margin: 2rem auto;
+            display: none;
+            text-align: left;
+        }
+
+        .game-text {
+            font-size: 1.3rem;
+            margin: 1rem 0;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 1rem 0;
+        }
+
+        .choice-btn {
+            background: #ffb3c1;
+            text-align: left;
+            padding: 1rem;
+        }
+
+        .reward {
+            font-size: 1.5rem;
+            color: #ff4d6d;
+            margin: 1rem 0;
+            display: none;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .animate {
+            animation: fadeIn 1s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="animate">Good Morning Puchku</h1>
+        
+        <div class="greeting animate">
+            Merry Christmas My Love ❤️
+        </div>
+
+        <div class="message animate">
+            Starting this Christmas morning thinking of you<br>
+            Your smile brightens my day more than any Christmas light<br>
+            Can't wait to celebrate this special day with you 🎄
+        </div>
+
+        <button onclick="showLove()">A Christmas Kiss 💝</button>
+        <button onclick="startGame()">Play Love Quest 💘</button>
+
+        <div class="game-container">
+            <div class="game-text"></div>
+            <div class="choices"></div>
+            <div class="reward"></div>
+        </div>
+    </div>
+
+    <script>
+        function showLove() {
+            const messages = [
+                "Starting my Christmas with thoughts of you 💕",
+                "Waking up to wish you the merriest Christmas 🎄",
+                "Can't wait to celebrate with you today ✨",
+                "You're my favorite Christmas blessing ❤️"
+            ];
+            alert(messages[Math.floor(Math.random() * messages.length)]);
+        }
+
+        const scenarios = [
+            {
+                text: "Good morning sleepyhead! What's your first thought as you wake up?",
+                choices: [
+                    { text: "Thinking about your sweet smile 😊", points: 2 },
+                    { text: "Wanting your morning kisses 💋", points: 3 },
+                    { text: "Can't wait for Christmas cuddles 🤗", points: 2 }
+                ]
+            },
+            {
+                text: "It's a cold Christmas morning. What should we do?",
+                choices: [
+                    { text: "Stay in bed and keep each other warm 💗", points: 3 },
+                    { text: "Make hot chocolate and snuggle 🍫", points: 2 },
+                    { text: "Exchange presents under the covers 🎁", points: 2 }
+                ]
+            },
+            {
+                text: "What's your Christmas wish from me?",
+                choices: [
+                    { text: "A day full of kisses 💋", points: 2 },
+                    { text: "A romantic surprise 💝", points: 3 },
+                    { text: "Just you, all to myself 💑", points: 2 }
+                ]
+            }
+        ];
+
+        let currentScenario = 0;
+        let totalPoints = 0;
+
+        function startGame() {
+            const gameContainer = document.querySelector('.game-container');
+            gameContainer.style.display = 'block';
+            currentScenario = 0;
+            totalPoints = 0;
+            showScenario();
+        }
+
+        function showScenario() {
+            if (currentScenario >= scenarios.length) {
+                showResult();
+                return;
+            }
+
+            const scenario = scenarios[currentScenario];
+            const gameText = document.querySelector('.game-text');
+            const choices = document.querySelector('.choices');
+            
+            gameText.textContent = scenario.text;
+            choices.innerHTML = '';
+            
+            scenario.choices.forEach(choice => {
+                const button = document.createElement('button');
+                button.className = 'choice-btn';
+                button.textContent = choice.text;
+                button.onclick = () => makeChoice(choice.points);
+                choices.appendChild(button);
+            });
+        }
+
+        function makeChoice(points) {
+            totalPoints += points;
+            currentScenario++;
+            showScenario();
+        }
+
+        function showResult() {
+            const gameText = document.querySelector('.game-text');
+            const choices = document.querySelector('.choices');
+            const reward = document.querySelector('.reward');
+            
+            gameText.style.display = 'none';
+            choices.style.display = 'none';
+            reward.style.display = 'block';
+
+            if (totalPoints >= 8) {
+                reward.innerHTML = "You're such a romantic! Time for extra special Christmas kisses 💋💕";
+            } else if (totalPoints >= 6) {
+                reward.innerHTML = "You're so sweet! Here's your Christmas morning cuddles 🤗💖";
+            } else {
+                reward.innerHTML = "You're adorable! Let's make this Christmas magical 💝✨";
+            }
+        }
+    </script>
+</body>
+</html>
