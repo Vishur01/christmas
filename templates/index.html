@@ -16,16 +16,66 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
 
         .container {
             text-align: center;
             padding: 2rem;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             max-width: 800px;
             margin: 20px;
             box-shadow: 0 0 20px rgba(255, 77, 109, 0.2);
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .santa {
+            position: fixed;
+            font-size: 50px;
+            animation: flyingSanta 20s linear infinite;
+            z-index: 100;
+        }
+
+        @keyframes flyingSanta {
+            0% {
+                transform: translateX(-100%) translateY(0) scale(1);
+                top: 20%;
+            }
+            25% {
+                transform: translateX(25vw) translateY(20vh) scale(1.2);
+                top: 15%;
+            }
+            50% {
+                transform: translateX(50vw) translateY(0) scale(1);
+                top: 25%;
+            }
+            75% {
+                transform: translateX(75vw) translateY(-20vh) scale(1.2);
+                top: 20%;
+            }
+            100% {
+                transform: translateX(100vw) translateY(0) scale(1);
+                top: 15%;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
@@ -34,6 +84,12 @@
             margin: 0;
             color: #ff4d6d;
             text-shadow: 1px 1px 2px rgba(255, 77, 109, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #ff4d6d, 0 0 10px #ff4d6d; }
+            to { text-shadow: 0 0 10px #ff4d6d, 0 0 20px #ff4d6d; }
         }
 
         .greeting {
@@ -41,6 +97,13 @@
             margin: 1.5rem 0;
             color: #ff758f;
             font-weight: 600;
+            opacity: 0;
+            animation: slideIn 1s ease-out 1s forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .message {
@@ -51,189 +114,278 @@
             padding: 1rem;
             border-top: 2px solid #ffe6ea;
             border-bottom: 2px solid #ffe6ea;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 2s forwards;
         }
 
-        button {
-            background: #ff4d6d;
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 1rem;
-            font-family: 'Quicksand', sans-serif;
-        }
-
-        button:hover {
-            background: #ff758f;
-            transform: scale(1.05);
-        }
-
-        .game-container {
-            margin: 2rem auto;
-            display: none;
-            text-align: left;
-        }
-
-        .game-text {
-            font-size: 1.3rem;
-            margin: 1rem 0;
-            line-height: 1.6;
-            color: #333;
-        }
-
-        .choices {
+        .gallery {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 1rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 2rem 0;
+            perspective: 1000px;
         }
 
-        .choice-btn {
-            background: #ffb3c1;
-            text-align: left;
-            padding: 1rem;
+        .gallery img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.5s;
+            animation: cardFlip 1s ease-out;
         }
 
-        .reward {
-            font-size: 1.5rem;
-            color: #ff4d6d;
-            margin: 1rem 0;
-            display: none;
-            text-align: center;
+        @keyframes cardFlip {
+            from { transform: rotateY(180deg); opacity: 0; }
+            to { transform: rotateY(0); opacity: 1; }
+        }
+
+        .gallery img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .gift-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .gift {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            cursor: pointer;
+            perspective: 1000px;
+            margin: 10px;
+        }
+
+        .gift-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .gift:hover .gift-box {
+            transform: rotateY(180deg);
+        }
+
+        .gift-front, .gift-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border-radius: 10px;
+        }
+
+        .gift-front {
+            background: #ff4d6d;
+            border: 2px solid #fff;
+        }
+
+        .gift-front::before {
+            content: '🎁';
+            font-size: 3rem;
+        }
+
+        .gift-back {
+            background: #ff758f;
+            transform: rotateY(180deg);
+            padding: 10px;
+            color: white;
             font-weight: bold;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
+        .heart {
+            position: absolute;
+            animation: floatHeart 4s ease-in infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatHeart {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)) rotate(360deg); opacity: 0; }
+        }
+
+        .christmas-lights {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .light {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: twinkle 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes twinkle {
+            from { opacity: 0.3; }
             to { opacity: 1; }
         }
 
-        .animate {
-            animation: fadeIn 1s ease-out;
+        @keyframes fall {
+            to { transform: translateY(100vh); }
         }
     </style>
 </head>
 <body>
+    <audio id="bg-music" autoplay loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <source src="https://www.chosic.com/wp-content/uploads/2024/01/We-Wish-You-a-Merry-Christmas.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="snow"></div>
+    <div class="christmas-lights"></div>
+    <div class="santa">🎅</div>
+
     <div class="container">
-        <h1 class="animate">Good Morning Puchku</h1>
+        <h1>Good Morning Puchku</h1>
         
-        <div class="greeting animate">
-            Merry Christmas My Love ❤️
+        <div class="greeting">
+            Merry Christmas My Cutiiii ❤️
         </div>
 
-        <div class="message animate">
+        <div class="message">
             Starting this Christmas morning thinking of you<br>
             Your smile brightens my day more than any Christmas light<br>
             Can't wait to celebrate this special day with you 🎄
         </div>
 
-        <button onclick="showLove()">A Christmas Kiss 💝</button>
-        <button onclick="startGame()">Play Love Quest 💘</button>
+        <div class="gift-container">
+            <div class="gift">
+                <div class="gift-box">
+                    <div class="gift-front"></div>
+                    <div class="gift-back">Infinite Hugs 🤗</div>
+                </div>
+            </div>
+            <div class="gift">
+                <div class="gift-box">
+                    <div class="gift-front"></div>
+                    <div class="gift-back">Endless Kisses 💋</div>
+                </div>
+            </div>
+            <div class="gift">
+                <div class="gift-box">
+                    <div class="gift-front"></div>
+                    <div class="gift-back">Forever Love ❤️</div>
+                </div>
+            </div>
+            <div class="gift">
+                <div class="gift-box">
+                    <div class="gift-front"></div>
+                    <div class="gift-back">Sweet Dreams 💝</div>
+                </div>
+            </div>
+        </div>
 
-        <div class="game-container">
-            <div class="game-text"></div>
-            <div class="choices"></div>
-            <div class="reward"></div>
+        <div class="gallery">
+            <img src="static/IMG_20221020_225431_716.jpg" alt="Together Pic 1">
+            <img src="static\IMG_20230320_012622877.jpg" alt="Together Pic 2">
+            <img src="static/IMG_20230916_205914904_HDR.jpg" alt="Together Pic 3">
+            <img src="static\IMG-20220918-WA0027.jpg" alt="Together Pic 4">
+            <img src="static\IMG-20230320-WA0004.jpg" alt="Together Pic 5">
         </div>
     </div>
 
     <script>
-        function showLove() {
-            const messages = [
-                "Starting my Christmas with thoughts of you 💕",
-                "Waking up to wish you the merriest Christmas 🎄",
-                "Can't wait to celebrate with you today ✨",
-                "You're my favorite Christmas blessing ❤️"
-            ];
-            alert(messages[Math.floor(Math.random() * messages.length)]);
-        }
-
-        const scenarios = [
-            {
-                text: "Good morning sleepyhead! What's your first thought as you wake up?",
-                choices: [
-                    { text: "Thinking about your sweet smile 😊", points: 2 },
-                    { text: "Wanting your morning kisses 💋", points: 3 },
-                    { text: "Can't wait for Christmas cuddles 🤗", points: 2 }
-                ]
-            },
-            {
-                text: "It's a cold Christmas morning. What should we do?",
-                choices: [
-                    { text: "Stay in bed and keep each other warm 💗", points: 3 },
-                    { text: "Make hot chocolate and snuggle 🍫", points: 2 },
-                    { text: "Exchange presents under the covers 🎁", points: 2 }
-                ]
-            },
-            {
-                text: "What's your Christmas wish from me?",
-                choices: [
-                    { text: "A day full of kisses 💋", points: 2 },
-                    { text: "A romantic surprise 💝", points: 3 },
-                    { text: "Just you, all to myself 💑", points: 2 }
-                ]
-            }
+            let audioTracks = [
+            "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            "https://www.chosic.com/wp-content/uploads/2024/01/We-Wish-You-a-Merry-Christmas.mp3",
+            "https://www.chosic.com/wp-content/uploads/2024/01/Jingle-Bells.mp3"
         ];
 
-        let currentScenario = 0;
-        let totalPoints = 0;
+        let currentTrack = 0;
+        const bgMusic = document.getElementById('bg-music');
 
-        function startGame() {
-            const gameContainer = document.querySelector('.game-container');
-            gameContainer.style.display = 'block';
-            currentScenario = 0;
-            totalPoints = 0;
-            showScenario();
-        }
+        window.addEventListener('load', () => {
+            // Adding a timeout to allow the page to fully load before playing music
+            setTimeout(() => {
+                playMusic();
+            }, 1000); // Delay music start by 1 second to avoid autoplay restrictions
+        });
 
-        function showScenario() {
-            if (currentScenario >= scenarios.length) {
-                showResult();
-                return;
-            }
-
-            const scenario = scenarios[currentScenario];
-            const gameText = document.querySelector('.game-text');
-            const choices = document.querySelector('.choices');
-            
-            gameText.textContent = scenario.text;
-            choices.innerHTML = '';
-            
-            scenario.choices.forEach(choice => {
-                const button = document.createElement('button');
-                button.className = 'choice-btn';
-                button.textContent = choice.text;
-                button.onclick = () => makeChoice(choice.points);
-                choices.appendChild(button);
+        function playMusic() {
+            bgMusic.src = audioTracks[currentTrack];
+            bgMusic.play().catch(() => {
+                console.log('Autoplay prevented');
             });
         }
 
-        function makeChoice(points) {
-            totalPoints += points;
-            currentScenario++;
-            showScenario();
-        }
+        bgMusic.addEventListener('ended', () => {
+            currentTrack = (currentTrack + 1) % audioTracks.length;
+            playMusic();
+        });
 
-        function showResult() {
-            const gameText = document.querySelector('.game-text');
-            const choices = document.querySelector('.choices');
-            const reward = document.querySelector('.reward');
-            
-            gameText.style.display = 'none';
-            choices.style.display = 'none';
-            reward.style.display = 'block';
-
-            if (totalPoints >= 8) {
-                reward.innerHTML = "You're such a romantic! Time for extra special Christmas kisses 💋💕";
-            } else if (totalPoints >= 6) {
-                reward.innerHTML = "You're so sweet! Here's your Christmas morning cuddles 🤗💖";
-            } else {
-                reward.innerHTML = "You're adorable! Let's make this Christmas magical 💝✨";
+        function createSnow() {
+            const snow = document.querySelector('.snow');
+            for (let i = 0; i < 50; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 10 + 5}px;
+                    height: ${Math.random() * 10 + 5}px;
+                    background: white;
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}vw;
+                    animation: fall ${Math.random() * 5 + 5}s linear infinite;
+                `;
+                snow.appendChild(snowflake);
             }
         }
+
+        function createLights() {
+            const lights = document.querySelector('.christmas-lights');
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff'];
+            for (let i = 0; i < 30; i++) {
+                const light = document.createElement('div');
+                light.className = 'light';
+                light.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                light.style.left = `${Math.random() * 100}%`;
+                light.style.top = `${Math.random() * 100}%`;
+                light.style.animationDelay = `${Math.random() * 2}s`;
+                lights.appendChild(light);
+            }
+        }
+
+        function createHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.className = 'heart';
+                heart.style.fontSize = `${Math.random() * 20 + 10}px`;
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.top = '100%';
+                heart.style.setProperty('--x', `${Math.random() * 200 - 100}px`);
+                heart.style.setProperty('--y', `-${Math.random() * 300 + 200}px`);
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 4000);
+            }, 300);
+        }
+
+        createSnow();
+        createLights();
+        createHearts();
+
+        document.querySelectorAll('.gallery img').forEach((img, index) => {
+            img.style.animationDelay = `${index * 0.2}s`;
+        });
     </script>
 </body>
 </html>
